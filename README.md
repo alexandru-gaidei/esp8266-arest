@@ -38,7 +38,7 @@ If you want to know more about aREST, go over to [http://arest.io/](http://arest
 }
 ```
 
-`http://wifi-ip/relay-state?params=0|1`
+`http://wifi-ip/relay-switch`
 ```
 { 
    "return_value":0|1,
@@ -47,4 +47,9 @@ If you want to know more about aREST, go over to [http://arest.io/](http://arest
    "hardware":"esp8266",
    "connected":true
 }
+```
+
+`http://wifi-ip/esp?params=reset`
+```
+Reset the module, returns http error due to restart hardware.
 ```
