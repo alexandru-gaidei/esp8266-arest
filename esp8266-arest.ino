@@ -29,6 +29,7 @@ unsigned long sensorPreviousMillis = 0;
 const long sensorInterval = 2000; 
 
 int relayControl(String command);
+int espControl(String command);
 
 
 void setup(void)
@@ -38,11 +39,15 @@ void setup(void)
 
   pinMode(relayPin, OUTPUT);
 
+  digitalWrite(relayPin, LOW);
+  relayState = LOW;
+
   rest.variable("temperature",&temperature);
   rest.variable("humidity",&humidity);
   rest.variable("heatindex",&heatindex);
   rest.variable("relay",&relayState);
-  rest.function("relay-state",relayControl);
+  rest.function("relay-switch",relayControl);
+  rest.function("esp",espControl);
 
   rest.set_id(deviceId);
   rest.set_name(deviceName);
@@ -83,10 +88,21 @@ void loop()
 
 int relayControl(String command)
 {
-  int state = command.toInt();
+  int state = digitalRead(relayPin);
+  state = state == LOW ? HIGH : LOW;
   digitalWrite(relayPin, state);
   relayState = state;
-  return state;
+  return relayState;
+}
+
+
+int espControl(String command)
+{
+  if(command == "reset") {
+    Serial.println("Reset ESP.");
+    ESP.reset();
+  }
+  return 0;
 }
 
 
